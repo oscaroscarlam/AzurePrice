@@ -47,8 +47,10 @@ function headerConfig(sheet){
     "location",
     "retailPrice",
     "unitPrice",
+    "currencyCode" ,
     "unitOfMeasure",
-    "type"
+    "type",
+    "reservationTerm"
     ]
   for( headerColumn = 0 ; headerColumn < headerlist.length ; headerColumn++){
      sheet.getRange(header,headerColumn+1).setValue(headerlist[headerColumn]); 
@@ -70,6 +72,7 @@ function fetchedcontentRowConfig(RowID,data){
   const unitOfMeasure = data.Items[RowID].unitOfMeasure;
 //other
   const type = data.Items[RowID].type;
+  const reservationTerm = data.Items[RowID].reservationTerm;
   return [
     productName,
     skuName,
@@ -79,7 +82,9 @@ function fetchedcontentRowConfig(RowID,data){
     location,
     retailPrice,
     unitPrice,
+    currencyCode,
     unitOfMeasure,
-    type
+    type,
+    reservationTerm
     ]
 }
