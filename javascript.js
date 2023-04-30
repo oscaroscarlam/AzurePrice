@@ -69,6 +69,7 @@ function CallAPI() {
   console.log(data.NextPageLink);
   response = UrlFetchApp.fetch(data.NextPageLink);
   data = JSON.parse(response);
+  console.log(data.NextPageLink);
   while ("NextPageLink" in data) {
     for ( RowID = 0; RowID < data.Items.length; RowID++) {
       Value=fetchedcontentRowConfig(RowID,data);
