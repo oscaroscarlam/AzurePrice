@@ -1,3 +1,34 @@
+function CallAPI() {
+  let response = UrlFetchApp.fetch(APIParameters());
+  let data = JSON.parse(response);
+  const sheet = SpreadsheetApp.getActiveSheet();
+  headerConfig(sheet);
+  var fetchedcontentRow=2;
+  for ( RowID = 0; RowID < data.Items.length; RowID++) {
+    Value=fetchedcontentRowConfig(RowID,data);
+    for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
+      sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
+    }
+    fetchedcontentRow++; 
+  }
+  console.log(data.NextPageLink);
+  response = UrlFetchApp.fetch(data.NextPageLink);
+  data = JSON.parse(response);
+  console.log(data.NextPageLink);
+  while ("NextPageLink" in data) {
+    for ( RowID = 0; RowID < data.Items.length; RowID++) {
+      Value=fetchedcontentRowConfig(RowID,data);
+      for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
+        sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
+      }
+      fetchedcontentRow++;
+    }
+    response = UrlFetchApp.fetch(data.NextPageLink);
+    data = JSON.parse(response);
+    console.log(data.NextPageLink);
+  }
+}
+
 function APIParameters(){
   const AzurePriceLink = "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter="
   const serviceFamily = "serviceName eq 'Virtual Machines'"
@@ -51,35 +82,4 @@ function fetchedcontentRowConfig(RowID,data){
     unitOfMeasure,
     type
     ]
-}
-
-function CallAPI() {
-  let response = UrlFetchApp.fetch(APIParameters());
-  let data = JSON.parse(response);
-  const sheet = SpreadsheetApp.getActiveSheet();
-  headerConfig(sheet);
-  var fetchedcontentRow=2;
-  for ( RowID = 0; RowID < data.Items.length; RowID++) {
-    Value=fetchedcontentRowConfig(RowID,data);
-    for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
-      sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
-    }
-    fetchedcontentRow++; 
-  }
-  console.log(data.NextPageLink);
-  response = UrlFetchApp.fetch(data.NextPageLink);
-  data = JSON.parse(response);
-  console.log(data.NextPageLink);
-  while ("NextPageLink" in data) {
-    for ( RowID = 0; RowID < data.Items.length; RowID++) {
-      Value=fetchedcontentRowConfig(RowID,data);
-      for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
-        sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
-      }
-      fetchedcontentRow++;
-    }
-    response = UrlFetchApp.fetch(data.NextPageLink);
-    data = JSON.parse(response);
-    console.log(data.NextPageLink);
-  }
 }
