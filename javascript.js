@@ -73,6 +73,7 @@ function fetchedcontentRowConfig(RowID,data){
 //other
   const type = data.Items[RowID].type;
   const reservationTerm = data.Items[RowID].reservationTerm;
+  const currencyCode = data.Items[RowID].currencyCode;
   return [
     productName,
     skuName,
