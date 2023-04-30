@@ -16,7 +16,8 @@ function headerConfig(sheet){
     "location",
     "retailPrice",
     "unitPrice",
-    "unitOfMeasure"
+    "unitOfMeasure",
+    "type"
     ]
   for( headerColumn = 0 ; headerColumn < headerlist.length ; headerColumn++){
      sheet.getRange(header,headerColumn+1).setValue(headerlist[headerColumn]); 
@@ -36,6 +37,8 @@ function fetchedcontentRowConfig(RowID,data){
   const retailPrice = data.Items[RowID].retailPrice;
   const unitPrice = data.Items[RowID].unitPrice;
   const unitOfMeasure = data.Items[RowID].unitOfMeasure;
+//other
+  const type = data.Items[RowID].type;
   return [
     productName,
     skuName,
@@ -45,7 +48,8 @@ function fetchedcontentRowConfig(RowID,data){
     location,
     retailPrice,
     unitPrice,
-    unitOfMeasure
+    unitOfMeasure,
+    type
     ]
 }
 
@@ -65,7 +69,6 @@ function CallAPI() {
   console.log(data.NextPageLink);
   response = UrlFetchApp.fetch(data.NextPageLink);
   data = JSON.parse(response);
-  console.log(data.NextPageLink);
   while ("NextPageLink" in data) {
     for ( RowID = 0; RowID < data.Items.length; RowID++) {
       Value=fetchedcontentRowConfig(RowID,data);
