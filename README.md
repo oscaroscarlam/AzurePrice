@@ -60,8 +60,9 @@ function APIParameters(){
   let data = JSON.parse(response);
 ```
 ##### Example of Azure Price API:
+````
 https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq 'Virtual Machines' and armRegionName eq 'eastasia' and priceType eq 'DevTestConsumption' and contains(meterName, 'Spot') eq false
-
+````
 
 #### Step_2_Configure_GoogleSheet_header
 ```javascript
