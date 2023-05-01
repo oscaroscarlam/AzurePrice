@@ -11,6 +11,7 @@ function CallAPI() {
     }
     fetchedcontentRow++; 
   }
+
   console.log(data.NextPageLink);
   response = UrlFetchApp.fetch(data.NextPageLink);
   data = JSON.parse(response);
@@ -23,6 +24,9 @@ function CallAPI() {
       }
       fetchedcontentRow++;
     }
+    if(data.NextPageLink == null){
+      break;
+    }
     response = UrlFetchApp.fetch(data.NextPageLink);
     data = JSON.parse(response);
     console.log(data.NextPageLink);
@@ -30,12 +34,14 @@ function CallAPI() {
 }
 
 function APIParameters(){
-  const AzurePriceLink = "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter="
+  const AzurePriceLink = "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter="
   const serviceFamily = "serviceName eq 'Virtual Machines'"
   const armRegionName = "armRegionName eq 'eastasia'"
+//priceType :[ DevTestConsumption , Consumption , Reservation ]
   const priceType = "priceType eq 'Consumption'"   
   const meterName = "contains(meterName, 'Spot') eq false"
   const APIParametersresult = AzurePriceLink.concat([serviceFamily,armRegionName,priceType,meterName].join(' and '))
+  console.log(APIParametersresult);
   return APIParametersresult;
 }
 function headerConfig(sheet){
@@ -52,7 +58,13 @@ function headerConfig(sheet){
     "currencyCode" ,
     "unitOfMeasure",
     "type",
-    "reservationTerm"
+    "reservationTerm",
+    "savingsPlan_unitPrice_3_Years",
+    "savingsPlan_retailPrice_3_Years",
+    "savingsPlan_term_3_Years",
+    "savingsPlan_unitPrice_1_Years",
+    "savingsPlan_retailPrice_1_Years",
+    "savingsPlan_term_1_Years"       
     ]
   for( headerColumn = 0 ; headerColumn < headerlist.length ; headerColumn++){
      sheet.getRange(header,headerColumn+1).setValue(headerlist[headerColumn]); 
@@ -76,6 +88,22 @@ function fetchedcontentRowConfig(RowID,data){
   const type = data.Items[RowID].type;
   const reservationTerm = data.Items[RowID].reservationTerm;
   const currencyCode = data.Items[RowID].currencyCode;
+//Saving Plan
+if("savingsPlan" in data.Items[RowID]){
+    savingsPlan_unitPrice_3_Years = data.Items[RowID].savingsPlan[0].unitPrice;
+    savingsPlan_retailPrice_3_Years=data.Items[RowID].savingsPlan[0].retailPrice
+    savingsPlan_term_3_Years=data.Items[RowID].savingsPlan[0].term;
+    savingsPlan_unitPrice_1_Years=data.Items[RowID].savingsPlan[1].unitPrice;
+    savingsPlan_retailPrice_1_Years=data.Items[RowID].savingsPlan[1].retailPrice;
+    savingsPlan_term_1_Years =data.Items[RowID].savingsPlan[1].term;
+}else{
+  savingsPlan_unitPrice_3_Years =" ";
+  savingsPlan_retailPrice_3_Years=" ";
+  savingsPlan_term_3_Years=" ";
+  savingsPlan_unitPrice_1_Years=" ";
+  savingsPlan_retailPrice_1_Years=" ";
+  savingsPlan_term_1_Years =" ";
+}
   return [
     productName,
     skuName,
@@ -88,6 +116,12 @@ function fetchedcontentRowConfig(RowID,data){
     currencyCode,
     unitOfMeasure,
     type,
-    reservationTerm
+    reservationTerm,
+    savingsPlan_unitPrice_3_Years,
+    savingsPlan_retailPrice_3_Years,
+    savingsPlan_term_3_Years,
+    savingsPlan_unitPrice_1_Years,
+    savingsPlan_retailPrice_1_Years,
+    savingsPlan_term_1_Years 
     ]
 }
