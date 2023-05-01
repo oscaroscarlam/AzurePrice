@@ -37,7 +37,7 @@ graph TD;
     Step_4_Write_API_Content_into_GoogleSheet-->Step_5_Call_API_for_remaining_content;    
     Step_5_Call_API_for_remaining_content-->Step_6_Get_API_Call_Content;  
     Step_6_Get_API_Call_Content-->Step_7_Write_API_Content_into_GoogleSheet;     
-    Step_7_Write_API_Content_into_GoogleSheet-->if_remaining_content_exist; 
+    Step_7_Write_API_Content_into_GoogleSheet-->if_remaining_content_exists; 
     Step_7_Write_API_Content_into_GoogleSheet-->if_remaining_content_does_not_exist;
     if_remaining_content_exists-->Step_5_Call_API_for_remaining_content; 
     if_remaining_content_does_not_exist-->API_Calls_Finished; 
