@@ -210,13 +210,16 @@ https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&curren
 https://www.odata.org/documentation/odata-version-2-0/uri-conventions/
 
 
-### Google Sheet
+### Result Demo: Google Sheet
 https://docs.google.com/spreadsheets/d/1UoMHFPPySJuxAf70cw_SSlds6m0Ih35IcLXgptkCpL8/edit?usp=sharing
 
-## Google Apps Script
+### Google Apps Script
 https://script.google.com/home/start<br />
 https://developers.google.com/apps-script/guides/sheets/functions?hl=zh-tw<br />
 https://www.youtube.com/watch?v=70F3RlazGMY
+
+### Azure Price Pricing Calculator
+https://azure.microsoft.com/en-us/pricing/calculator/
 
 ### Reference
 Introduction to the Azure Pricing API including examples
