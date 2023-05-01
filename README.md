@@ -42,7 +42,7 @@ graph TD;
     if_remaining_content_exists-->Step_5_Call_API_for_remaining_content; 
     if_remaining_content_does_not_exist-->API_Calls_Finished; 
 ```
-### Step_1_Declare_API_Parameters
+#### Step_1_Declare_API_Parameters
 ```javascript
 function APIParameters(){
   const AzurePriceLink = "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter="
@@ -59,8 +59,11 @@ function APIParameters(){
   let response = UrlFetchApp.fetch(APIParameters());
   let data = JSON.parse(response);
 ```
+##### Example of Azure Price API:
+https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq 'Virtual Machines' and armRegionName eq 'eastasia' and priceType eq 'DevTestConsumption' and contains(meterName, 'Spot') eq false
 
-### Step_2_Configure_GoogleSheet_header
+
+#### Step_2_Configure_GoogleSheet_header
 ```javascript
 function headerConfig(sheet){
   const header =1
@@ -89,7 +92,7 @@ function headerConfig(sheet){
   }
 }
 ```
-### Step_3_Get_API_Call_Content
+#### Step_3_Get_API_Call_Content
 ```javascript
 //Get Azure Price API Content
   for ( RowID = 0; RowID < data.Items.length; RowID++) {
@@ -101,7 +104,7 @@ function headerConfig(sheet){
     fetchedcontentRow++; 
   }
 ```
-### Step_4_Write_API_Content_into_GoogleSheet
+#### Step_4_Write_API_Content_into_GoogleSheet
 ```javascript
 function fetchedcontentRowConfig(RowID,data){
 //Service Name
@@ -158,7 +161,7 @@ if("savingsPlan" in data.Items[RowID]){
     ]
 }
 ```
-### Step_5_Call_API_for_remaining_content
+#### Step_5_Call_API_for_remaining_content
 ```javascript
 //Call API for remaining content
   console.log(data.NextPageLink);
@@ -166,7 +169,18 @@ if("savingsPlan" in data.Items[RowID]){
   data = JSON.parse(response);
   console.log(data.NextPageLink);
 ```
-### Step_6_Get_API_Call_Content and Step_7_Write_API_Content_into_GoogleSheet
+##### Example of Azure Price API for_remaining_content:
+###### Verison 1:
+```
+https://prices.azure.com:443/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&$filter=serviceName%20eq%20%27Virtual%20Machines%27%20and%20armRegionName%20eq%20%27eastasia%27%20and%20priceType%20eq%20%27DevTestConsumption%27%20and%20contains%28meterName%2C%20%27Spot%27%29%20eq%20false&$skip=100
+```
+###### Verison 2 (human-readable):
+```
+https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq 'Virtual Machines' and armRegionName eq 'eastasia' and priceType eq 'DevTestConsumption' and contains(meterName, 'Spot') eq false&$skip=100
+```
+
+
+#### Step_6_Get_API_Call_Content and Step_7_Write_API_Content_into_GoogleSheet
 ```javascript
   while ("NextPageLink" in data) {
 //Get API Call Content
@@ -191,16 +205,18 @@ if("savingsPlan" in data.Items[RowID]){
 ```
 
 
-## URI Conventions (OData Version 2.0)
+### URI Conventions (OData Version 2.0)
 https://www.odata.org/documentation/odata-version-2-0/uri-conventions/
 
 
-## Google Sheet
+### Google Sheet
 https://docs.google.com/spreadsheets/d/1UoMHFPPySJuxAf70cw_SSlds6m0Ih35IcLXgptkCpL8/edit?usp=sharing
 
 ## Google Apps Script
-https://script.google.com/home/start
+https://script.google.com/home/start<br />
+https://developers.google.com/apps-script/guides/sheets/functions?hl=zh-tw<br />
+https://www.youtube.com/watch?v=70F3RlazGMY
 
-## Reference
+### Reference
 Introduction to the Azure Pricing API including examples
 https://davecallan.com/azure-price-api-examples/
