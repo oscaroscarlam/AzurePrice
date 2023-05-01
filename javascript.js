@@ -1,32 +1,42 @@
 function CallAPI() {
-  let response = UrlFetchApp.fetch(APIParameters());
-  let data = JSON.parse(response);
+//Get Google Sheet Active
   const sheet = SpreadsheetApp.getActiveSheet();
+//Configure Google Sheet header
   headerConfig(sheet);
   var fetchedcontentRow=2;
+//Call Azure Price API and Declare API Parameters
+  let response = UrlFetchApp.fetch(APIParameters());
+  let data = JSON.parse(response);
+//Get Azure Price API Content
   for ( RowID = 0; RowID < data.Items.length; RowID++) {
+//Write API Content into Google Sheet
     Value=fetchedcontentRowConfig(RowID,data);
     for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
       sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
     }
     fetchedcontentRow++; 
   }
-
+//Call API for remaining content
   console.log(data.NextPageLink);
   response = UrlFetchApp.fetch(data.NextPageLink);
   data = JSON.parse(response);
   console.log(data.NextPageLink);
   while ("NextPageLink" in data) {
+//Get API Call Content
     for ( RowID = 0; RowID < data.Items.length; RowID++) {
+//Write API Content into Google Sheet
       Value=fetchedcontentRowConfig(RowID,data);
       for( ValueColumn = 0 ; ValueColumn < Value.length ; ValueColumn++){
         sheet.getRange(fetchedcontentRow,ValueColumn+1).setValue(Value[ValueColumn]); 
       }
       fetchedcontentRow++;
     }
+//if remaining content does not exist
     if(data.NextPageLink == null){
+      //API Calls Finished
       break;
     }
+//if the remaining content exists
     response = UrlFetchApp.fetch(data.NextPageLink);
     data = JSON.parse(response);
     console.log(data.NextPageLink);
@@ -38,7 +48,7 @@ function APIParameters(){
   const serviceFamily = "serviceName eq 'Virtual Machines'"
   const armRegionName = "armRegionName eq 'eastasia'"
 //priceType :[ DevTestConsumption , Consumption , Reservation ]
-  const priceType = "priceType eq 'Consumption'"   
+  const priceType = "priceType eq 'DevTestConsumption'"   
   const meterName = "contains(meterName, 'Spot') eq false"
   const APIParametersresult = AzurePriceLink.concat([serviceFamily,armRegionName,priceType,meterName].join(' and '))
   console.log(APIParametersresult);
