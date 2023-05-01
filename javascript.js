@@ -33,7 +33,9 @@ function APIParameters(){
   const AzurePriceLink = "https://prices.azure.com/api/retail/prices?currencyCode='USD'&$filter="
   const serviceFamily = "serviceName eq 'Virtual Machines'"
   const armRegionName = "armRegionName eq 'eastasia'"
-  const APIParametersresult = AzurePriceLink.concat([serviceFamily,armRegionName].join(' and '))
+  const priceType = "priceType eq 'Consumption'"   
+  const meterName = "contains(meterName, 'Spot') eq false"
+  const APIParametersresult = AzurePriceLink.concat([serviceFamily,armRegionName,priceType,meterName].join(' and '))
   return APIParametersresult;
 }
 function headerConfig(sheet){
