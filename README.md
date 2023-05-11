@@ -224,3 +224,6 @@ https://azure.microsoft.com/en-us/pricing/calculator/
 ### Reference
 Introduction to the Azure Pricing API including examples
 https://davecallan.com/azure-price-api-examples/
+
+### testing
+https://oscaroscarlam.github.io/AzurePrice/
