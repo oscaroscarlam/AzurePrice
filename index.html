@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
+    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
-    <link href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
+    <script type="text/javascript" src="https://unpkg.com/table2excel@1.0.4/dist/table2excel.js"></script>
   </head>
   <body>
  <!-- Write your comments here -->
@@ -20,40 +20,94 @@
     <!-- Navbar content -->
     <a class="navbar-brand" href="#">
         <img src="https://swimburger.net/media/fbqnp2ie/azure.svg" width="50" height="30" alt="">
-        Azure Price Cost Estimation Tool
+        Azure Price Cost Estimation Tool 
+        <div class="spinner-border" role="status" style="visibility: hidden;" id="loading">
+        </div>
+        <button type="button" class="btn btn-info" id="Startsearch" onclick="search()" value="Start Search">Start Search</button>
+        <button type="button" class="btn btn-success" id="Startsearch" onclick="exporttable()" value="Start Search">Export Excel File</button>
     </a>
-    <a class="navbar-brand" href="#">Bata v1.0.0</a>
+    
+    <a class="navbar-brand" href="#">Bata v1.0.0
+      
+    </a>
    </nav>
- <!-- form content -->
- <div class="mx-auto" style="width: auto;">
-  <div class="p-3 mb-2 bg-secondary text-white">
-    <div class="container">
-      <div class="grey-bg container-fluid">
-        <section id="minimal-statistics">
-          <div class="row">
-            <div class="col-12 mt-3 mb-1">
-              <h4 class="text-uppercase"></h4>
-              <p>Select the API Azure Retail Prices Query Parameter</p>
+ <!-- sidebar content -->
+ <div class="mx-auto" style="width: auto;margin-top: 2%;">
+ <div class="container" style="max-width:none;width: 100%;margin-left:0%;margin-right:0%">
+  <div class="row" style="width: 100%">
+    <div class="col-2" style="width: 25%">
+   <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical" >
+    <a class="nav-link active bg-dark text-white" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+      <img src="http://code.benco.io/icon-collection/azure-icons/Virtual-Machine.svg" width="50" height="30" alt="">
+      Virtual Machine
+    </a>
+    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+      <img src="http://code.benco.io/icon-collection/azure-icons/Virtual-Machine.svg" width="50" height="30" alt="">
+      Virtual Machine License (Windows Type)
+    </a>
+    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+      <img src="http://code.benco.io/icon-collection/azure-icons/Virtual-Machine.svg" width="50" height="30" alt="">
+      Virtual Machine License (Linux Type)
+    </a>
+    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+  </div>
+</div>
+  <div class="col-10" style="width: 75%">
+  <div class="tab-content" id="v-pills-tabContent">
+  <!-- Virtual Machine -->   
+    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+       <!-- form content -->
+        <div class="mx-auto" style="width: auto;">
+          <div class="p-3 mb-2 bg-secondary text-white">
+            <div class="container">
+              <div class="grey-bg container-fluid">
+                <section id="minimal-statistics">
+                  <div class="row">
+                    <div class="col-12 mt-3 mb-1">
+                      <h4 class="text-uppercase"></h4>
+                     
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="table-responsive mx-auto" style="width: auto;height:500px" id="tablelist1">
+                      </div>
+                  </div>
+                </section>
+                <!-- loading -->
             </div>
           </div>
-          <div class="row">
-            <div class="table-responsive mx-auto" style="width: auto;" id="tablelist1">
-              </div>
-   
-          </div>
-
-        </section>
-         <!-- loading -->
- <div class="text-center" style="visibility: hidden;margin: 2%;" id="loading">
-  <div class="spinner-border" role="status">
-    <span class="sr-only"></span>
-  </div>
-</div>
+        </div>
+      </div>
     </div>
+    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+      <button type="button" class="btn btn-info" id="windowlicenseID" onclick="windowlicense()" value="Start Search">Show Window License Cost</button>
+      <div class="spinner-border" role="status" style="visibility: hidden;width: 100px; height: 100px;" id="loading1" >
+      </div>
+      <div class="table-responsive mx-auto" style="width: auto;height:500px" id="tablelistVM">
+        <table id="jsonTableVM" data-excel-name="Windows License Table" class="table table-hover"><thead><tr></tr></thead><tbody></tbody></table>
+      </div>
 
+
+
+    </div>
+    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+      <button type="button" class="btn btn-info" id="linuxlicenseID" onclick="linuxlicense()" value="Start Search">Show Linux License Cost</button>
+      <div class="spinner-border" role="status" style="visibility: hidden;width: 100px; height: 100px;" id="loading2" >
+      </div>
+      <div class="table-responsive mx-auto" style="width: auto;height:500px" id="tablelistVM1">
+        <table id="jsonTableVM1" data-excel-name="Linux License Table" class="table table-hover"><thead><tr></tr></thead><tbody></tbody></table>
+      </div>
+
+      
+    </div>
+    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
   </div>
 </div>
 </div>
+</div>
+</div>
+
+
 
  <!-- tab navbar -->
    <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -94,32 +148,17 @@
     <div 
       class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
       <div class="table-responsive mx-auto" style="width: auto;" id="tablelist">
-        <table id="jsonTable" class="table table-hover"><thead><tr></tr></thead><tbody></tbody></table>
+        <table id="jsonTable" data-excel-name="Azure VM Comparison Table" class="table table-hover"><thead><tr></tr></thead><tbody></tbody></table>
       </div>
     </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-      <table
-      id="table"
-      data-url="json/data1.json"
-      data-filter-control="true"
-      data-show-search-clear-button="true">
-      <thead>
-        <tr>
-          <th data-field="id">ID</th>
-          <th data-field="name" data-filter-control="input">Item Name</th>
-          <th data-field="price" data-filter-control="select">Item Price</th>
-        </tr>
-      </thead>
-    </table>
+TBC
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
       <iframe id="iframe_id" src="url" title="description" onload="this.width=screen.width;this.height=screen.height;"></iframe>
     </div>
   </div>
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-  </div>
+  
 
 
 
@@ -129,6 +168,7 @@
 <!-- Write your comments here -->
   
 <script>
+  
 // Table Generation Start
 const VMSP=[
  {
@@ -1236,14 +1276,14 @@ const removeEmptyOrNull = (obj) => {
 myObj2 = removeEmptyOrNull(VMSP);
 
 function drawTable(data) {
-  $('#tablelist1').append(data[0].FIELD1+' vCPU VM'+
-  '<div class="form-check form-switch"> <input class="form-check-input" name="'+
+  $('#tablelist1').append(
+  '<div class="form-check form-switch" > <input class="form-check-input" name="'+
     data[0].FIELD1+"vCPU"
         +'" type="checkbox" id="'
           + data[0].FIELD1+"vCPU"+
           '" onClick="toggle(this,\''+ data[0].FIELD1+"vCPU"+
           '\')"> <label class="form-check-label" for="'
-          + data[0].FIELD1+"vCPU"+'"></label> </div>'
+          + data[0].FIELD1+"vCPU"+'">'+data[0].FIELD1+' vCPU'+'</label> </div>'
   
   )
   // Get Table headers and print
@@ -1260,16 +1300,15 @@ function drawTable(data) {
     if(list[j]!="FIELD1"){
       $('#VMtable'+data[0].FIELD1+' thead tr').append(`<th data-field="`+
       list[j]
-      +`" data-filter-control="select">` + 
-        list[j] 
-        +" RAM "+
+      +`" data-filter-control="select">` +
         '<div class="form-check form-switch"> <input class="form-check-input" name="'+
           data[0].FIELD1+"vCPU"
         +'" type="checkbox" id="'
           + data[0].FIELD1+"vCPU"+list[j]+"RAM"+
           '" onClick="toggle(this,\''+ data[0].FIELD1+"vCPU"+list[j]+"RAM"+
           '\')"> <label class="form-check-label" for="'
-          + data[0].FIELD1+"vCPU"+list[j]+"RAM"+'"></label> </div>'
+          + data[0].FIELD1+"vCPU"+list[j]+"RAM"+'">'+list[j] +" RAM "
+          +'</label> </div>'
         + '</th>');
     }  
   }
@@ -1278,7 +1317,6 @@ function drawTable(data) {
     drawRow(data[i],list);
   }
 }
-
 function toggle(source,name) {
   checkboxes = document.querySelectorAll('[name^="'+name+'"]')
   for(var i=0, n=checkboxes.length;i<n;i++){
@@ -1302,18 +1340,11 @@ function drawRow(rowData,list) {
       +'">';
       rowContent+=rowData[list[j]].split(',')[p]
       rowContent+="</label></div>";
-      
     }
-   
-    row += "<td>" + 
-      rowContent
-      
-      + "</td>";
- 
+    row += "<td>" + rowContent + "</td>";
   };
   row+= "</tr>";
   $('#VMtable'+rowData.FIELD1+' tbody').append(row);
-  
 }
 for (let i = 0; i < myObj2.length; i++) {
   drawTable([myObj2[i]]);
@@ -1321,11 +1352,12 @@ for (let i = 0; i < myObj2.length; i++) {
 // Table Generation End
 
 //Result Table Generation Start
-function createTable(object){
-	$('#tablelist').append('<table id="jsonTable" class="table table-hover" data-filter-control="true" data-search="false" data-advanced-search="false"><thead><tr></tr></thead><tbody></tbody></table>');
-	
+function createTable(object,divID,tableID,exceltablename){
+	$('#'+divID+'').append('<table id="'+tableID+'" data-excel-name="'+exceltablename+'" class="table table-hover" data-filter-control="true" data-search="false" data-advanced-search="false"><thead><tr></tr></thead><tbody></tbody></table>');
   $.each(Object.keys(object[0]), function(index, key){
-    $('#jsonTable thead tr').append(`<th data-field="`+key+`" data-filter-control="select">` + key + '</th>');
+    $('#'+tableID+' thead tr').append(`<th data-field="`+key+`" data-filter-control="select" data-filter-control-multiple-select="true">` + 
+      keyVaule(key)
+      + '</th>');
   });	
   $.each(object, function(index, jsonObject){     
     if(Object.keys(jsonObject).length > 0){
@@ -1334,88 +1366,200 @@ function createTable(object){
          tableRow += '<td>' + jsonObject[key] + '</td>';
       });
       tableRow += "</tr>";
-      $('#jsonTable tbody').append(tableRow);
+      $('#'+tableID+' tbody').append(tableRow);
     }
 	});
 }
 
+function keyVaule(key){
+  if(key=="unitPrice"){
+      return "Unit Price $(USD)"
+    }if (key=="retailPrice") {
+      return "Monthly Price (730 hours) $(USD)"
+    } if (key=="retailPrice1") {
+      return "1 Year Price $(USD)"
+    }if (key=="retailPrice2"){
+      return "3 Year Price $(USD)"
+    }else{
+      return key
+    }      
+}
+
 function query (data) {
   return _.chain(data)
+  .orderBy(['armSkuName','retailPrice'], ['asc'])
     .map(item => ({
-      "serviceFamily": item?.serviceFamily,
-      "serviceName": item?.serviceName,
+    //  "serviceFamily": item?.serviceFamily,
+    //  "serviceName": item?.serviceName,
       "productName": item?.productName,
       "location": item?.location,
-      "armRegionName": item?.armRegionName,
+    // "armRegionName": item?.armRegionName,
       "armSkuName": item?.armSkuName,
-      "skuName": item?.skuName,
-      "retailPrice": item?.retailPrice,
-      "unitPrice": item?.unitPrice,
-      "unitOfMeasure": item?.unitOfMeasure,
-      "currencyCode": item?.currencyCode,
-      "reservationTerm": item?.reservationTerm
+    //  "skuName": item?.skuName,
+     // "retailPrice": item?.retailPrice,
+     "reservationTerm": 
+      (item?.reservationTerm == "1 Year"||item?.reservationTerm == "3 Years" )?
+      item?.reservationTerm+" Reserved Instance"
+      :
+      "Pay As You Go",
+     // "type": item?.type ,
+      
+      "unitPrice": 
+      (item?.reservationTerm == "1 Year" ||item?.reservationTerm == "3 Years" )?
+        (item?.reservationTerm == "1 Year")?
+        item?.unitPrice+" per 1 year":
+        item?.unitPrice+" per 3 years":
+        item?.unitPrice+" per hour"
+      ,
+
+      "retailPrice":
+      (item?.type != "Consumption")?
+        "":
+        (Math.round((item?.retailPrice*730*100))/100).toFixed(2),
+
+      "retailPrice1":
+      (item?.reservationTerm == "1 Year" ||item?.reservationTerm == "3 Years" )?
+        (item?.reservationTerm == "1 Year")?
+          item?.retailPrice:
+          "":
+        (Math.round((item?.retailPrice*730*12*100))/100).toFixed(2),
+
+      "retailPrice2":
+      (item?.reservationTerm == "1 Year" ||item?.reservationTerm == "3 Years" )?
+        (item?.reservationTerm == "1 Year")?
+          (Math.round((item?.retailPrice*3*100))/100).toFixed(2):
+          item?.retailPrice:
+        (Math.round((item?.retailPrice*730*12*3*100))/100).toFixed(2) ,
+
+     // "unitOfMeasure": item?.unitOfMeasure,
+      //"currencyCode": item?.currencyCode,
+
     }))
     .value()
 }
 //Result Table Generation End 
 
 //CORS Proxy Start
+function search(){
 $(document).ready(function(){
-  $("select").change(function(){
+    document.getElementById("Startsearch").disabled = true;
+    document.getElementById("Startsearch").className="btn btn-dark";
+    document.getElementById("Startsearch").innerHTML="Searching";
     document.getElementById("loading").style.visibility='visible'
-    const url="https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq '"
-            +$('#servicename').find('option:selected').val()+
-            "' and armRegionName eq '"
-            +$('#region').find('option:selected').val()+
-            "' and priceType eq '"
-            +$('#paymentterm').find('option:selected').val()+
-            "'"
+    const AzurePriceLink = "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter="
+    const serviceFamily = "serviceName eq 'Virtual Machines'"
+    const priceType = "priceType ne 'DevTestConsumption'"  
+    const armRegionName = "armRegionName eq 'eastasia'"  
+    const meterName = "contains(meterName, 'Spot') eq false"
+  //  const productName = "contains(productName, 'Windows') eq false"
+    const skuName = "contains(skuName, 'Low Priority') eq false"        
+    const SelectedVM=$('input:checked').map(function(){if(this.id.startsWith("Standard_") || this.id.startsWith("Basic_")){return this.id;}}).get().join(",").replace( /\s/g, '').split(",") 
+    const SelectedVMs="(armSkuName eq '"+SelectedVM.join("' or armSkuName eq '")+"')"
+    const url = AzurePriceLink.concat([
+                                      priceType,
+                                      serviceFamily,
+                                      armRegionName,
+                                      meterName,
+                                      skuName,
+                                //      productName,
+                                      SelectedVMs
+                                      ].join(' and '))
+    alert(url)
+            if(true){
+
+            
     const cors = 'https://header-9dvg.onrender.com/';
+    document.getElementById("jsonTable").remove();
     $.get(`${cors}${url}`, (res) => {
         const object1 = query(res.Items)
-        document.getElementById("jsonTable").remove();
         $(document).ready(function(){
-          createTable(object1);
+          createTable(object1,"tablelist","jsonTable","Azure VM Comparison Table");
           $('#jsonTable').bootstrapTable()
         });
         document.getElementById("loading").style.visibility='hidden';
       });
     document.getElementById("iframe_id").src=url
     document.getElementById("iframe_id").addEventListener("load", function() {
-      document.getElementById("loading").style.visibility='hidden'
+    document.getElementById("loading").style.visibility='hidden';
+    document.getElementById("Startsearch").className="btn btn-info";
+    document.getElementById("Startsearch").innerHTML="Start Search";
+    document.getElementById("Startsearch").disabled = false;
+    alert("Search Done")
+    });
+  }
+  
+});
+}
+
+//CORS Proxy End
+function query1 (data) {
+  return _.chain(data)
+    .orderBy(['unitPrice'], ['asc'])
+    .map(item => ({
+      "meterName": item?.meterName,
+      "productName": item?.productName,
+      "unitPrice": item?.unitPrice,
+      "retailPrice": (Math.round((item?.retailPrice*730*100))/100).toFixed(2),
+      "retailPrice1": (Math.round((item?.retailPrice*730*12*100))/100).toFixed(2),
+      "retailPrice2": (Math.round((item?.retailPrice*720*12*3*100))/100).toFixed(2)
+    }))
+    .value()
+}
+//Windows License
+function windowlicense(){
+const url1 = "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq 'Virtual Machines Licenses' and contains(productName, 'Windows') eq true and unitPrice ne 0.0 and productName ne 'Windows Server for Azure Stack HCI'"
+
+const cors = 'https://header-9dvg.onrender.com/';
+document.getElementById("windowlicenseID").disabled = true;
+document.getElementById("windowlicenseID").className="btn btn-dark";
+document.getElementById("windowlicenseID").innerHTML="Searching";
+document.getElementById("loading1").style.visibility='visible'
+document.getElementById("jsonTableVM").remove();
+$.get(`${cors}${url1}`, (res) => {
+    const object1 = query1(res.Items)
+    $(document).ready(function(){
+      createTable(object1,"tablelistVM","jsonTableVM","Windows License Table");
+      $('#jsonTableVM').bootstrapTable()
+      document.getElementById("loading1").remove();
+      document.getElementById("windowlicenseID").remove();
+      
     });
   });
-});
-
-$(function() {
-$('#jsonTable').bootstrapTable()
-})
-//CORS Proxy End
-
-//testing Start
-
-const url="https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=armSkuName eq '"
-            +'Standard_D96_v5'+
-           // "' or armSkuName eq '"
-           // +'Standard_D96a_v4'+
-            "' and armRegionName eq '"
-            +'eastasia'+
-            "'"
-            console.log(url)
+}
+//Linux License
+function linuxlicense(){
+const url1 = "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode='USD'&$filter=serviceName eq 'Virtual Machines Licenses' and contains(productName, 'Linux') eq true and unitPrice ne 0.0 and contains(productName, 'SQL') eq false and priceType ne 'Reservation'";
 const cors = 'https://header-9dvg.onrender.com/';
-$.get(`${cors}${url}`, (res) => {
-    const object1 = query(res.Items)
-    document.getElementById("jsonTable").remove();
+document.getElementById("linuxlicenseID").disabled = true;
+document.getElementById("linuxlicenseID").className="btn btn-dark";
+document.getElementById("linuxlicenseID").innerHTML="Searching";
+document.getElementById("loading2").style.visibility='visible'
+document.getElementById("jsonTableVM1").remove();
+$.get(`${cors}${url1}`, (res) => {
+    const object1 = query1(res.Items)
     $(document).ready(function(){
-      createTable(object1);
-      $('#jsonTable').bootstrapTable()
-    });})
+      createTable(object1,"tablelistVM1","jsonTableVM1","Linux License Table");
+      $('#jsonTableVM1').bootstrapTable()
+      document.getElementById("loading2").remove();
+      document.getElementById("linuxlicenseID").remove();
+      
+    });
+  });
+}
+// export all table
 
-//testing End
+function exporttable(){
+  var table2excel = new Table2Excel();
+  table2excel.export(document.querySelectorAll("table[id='jsonTableVM1'], table[id='jsonTableVM'], table[id='jsonTable']"), "Azure Price Cost Estimation");
+
+}
+//
+$('#v-pills-tab a').on('click', function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
 
 </script>
-
-
     
   </body>
 </html>
