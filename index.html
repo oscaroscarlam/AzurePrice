@@ -58,19 +58,16 @@
     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
        <!-- form content -->
         <div class="mx-auto" style="width: auto;">
-          <div class="p-3 mb-2 bg-secondary text-white">
+          <div class="p-3 mb-2 ">
             <div class="container">
               <div class="grey-bg container-fluid">
                 <section id="minimal-statistics">
                   <div class="row">
-                    <div class="col-12 mt-3 mb-1">
-                      <h4 class="text-uppercase"></h4>
-                     
-                    </div>
+                    <ul class="nav nav-tabs" id="myTabtest" role="tablist">
+                      <!-- tab navbar item-->
+                   </ul>
+                   <div class="tab-content" id="myTabContenttest">
                   </div>
-                  <div class="row">
-                    <div class="table-responsive mx-auto" style="width: auto;height:500px" id="tablelist1">
-                      </div>
                   </div>
                 </section>
                 <!-- loading -->
@@ -145,8 +142,10 @@
   </ul>
    <!-- tab content -->
   <div class="tab-content" id="myTabContent">
-    <div 
-      class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane fade show active" 
+      id="home" 
+      role="tabpanel" 
+      aria-labelledby="home-tab">
       <div class="table-responsive mx-auto" style="width: auto;" id="tablelist">
         <table id="jsonTable" data-excel-name="Azure VM Comparison Table" class="table table-hover"><thead><tr></tr></thead><tbody></tbody></table>
       </div>
@@ -1276,18 +1275,38 @@ const removeEmptyOrNull = (obj) => {
 myObj2 = removeEmptyOrNull(VMSP);
 
 function drawTable(data) {
-  $('#tablelist1').append(
-  '<div class="form-check form-switch" > <input class="form-check-input" name="'+
+  $('#myTabtest').append(
+    '<li class="nav-item" role="presentation"><button class="nav-link text-dark" id="'+
+    data[0].FIELD1+"vCPU-tab"
+    +'" data-bs-toggle="tab" data-bs-target="#'+
+    data[0].FIELD1+"vCPU-page"
+    +'" type="button" role="tab" aria-controls="'+
+    data[0].FIELD1+"vCPU-page"
+    +'" aria-selected="false">'+
+
+    '<div class="form-check form-switch" > <input class="form-check-input" name="'+
     data[0].FIELD1+"vCPU"
         +'" type="checkbox" id="'
           + data[0].FIELD1+"vCPU"+
           '" onClick="toggle(this,\''+ data[0].FIELD1+"vCPU"+
           '\')"> <label class="form-check-label" for="'
-          + data[0].FIELD1+"vCPU"+'">'+data[0].FIELD1+' vCPU'+'</label> </div>'
-  
-  )
+          + data[0].FIELD1+"vCPU"+'">'+
+          data[0].FIELD1+" vCPU"+
+          '</label> </div>'
+    +'</button> </li>'                        
+  );
+  $('#myTabContenttest').append(
+    '<div class="tab-pane fade" id="'+
+    data[0].FIELD1+"vCPU-page"+
+      '" role="tabpanel" aria-labelledby="'+
+      data[0].FIELD1+"vCPU-tab"+
+      '"><div class="table-responsive mx-auto" id="'+
+    data[0].FIELD1+"vCPU-page-table"+
+     '" style="width: auto;"></div></div>'                      
+  );
+
   // Get Table headers and print
-  $('#tablelist1').append('<table id="VMtable'+data[0].FIELD1+'" class="table table-hover" data-filter-control="true" data-search="false" data-advanced-search="false" ><thead><tr></tr></thead><tbody></tbody></table>');
+  $('#'+ data[0].FIELD1+"vCPU-page-table").append('<table id="VMtable'+data[0].FIELD1+'" class="table table-hover" data-filter-control="true" data-search="false" data-advanced-search="false" ><thead><tr></tr></thead><tbody></tbody></table>');
 
   var list=[]
   for (var j = 0; j < Object.keys(data[0]).length; j++) {
@@ -1298,7 +1317,7 @@ function drawTable(data) {
   list.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
   for(var j=0;j<list.length;j++){
     if(list[j]!="FIELD1"){
-      $('#VMtable'+data[0].FIELD1+' thead tr').append(`<th data-field="`+
+      $('#VMtable'+data[0].FIELD1+' thead').append(`<tr id="`+data[0].FIELD1+"vCPU"+list[j]+"RAM-tr"+`"><th data-field="`+
       list[j]
       +`" data-filter-control="select">` +
         '<div class="form-check form-switch"> <input class="form-check-input" name="'+
@@ -1307,9 +1326,11 @@ function drawTable(data) {
           + data[0].FIELD1+"vCPU"+list[j]+"RAM"+
           '" onClick="toggle(this,\''+ data[0].FIELD1+"vCPU"+list[j]+"RAM"+
           '\')"> <label class="form-check-label" for="'
-          + data[0].FIELD1+"vCPU"+list[j]+"RAM"+'">'+list[j] +" RAM "
+          + data[0].FIELD1+"vCPU"+list[j]+"RAM"+'"style="width:150px">'+
+          data[0].FIELD1+" vCPU "+
+          list[j] +" RAM "
           +'</label> </div>'
-        + '</th>');
+        + '</th></tr>');
     }  
   }
   // Print the content of rows in DataTable
@@ -1326,12 +1347,12 @@ function toggle(source,name) {
 
 
 function drawRow(rowData,list) {
-  var row = '<tr>';
+  var row = '';
  // $("#tablelist1").append(row);
   for (var j = 0; j < list.length; j++) {
     rowContent=""
     for (var p = 0; p < rowData[list[j]].split(',').length; p++) {
-      rowContent+='<div class="form-check form-switch"><input class="form-check-input" name="'+
+      rowContent+='<td> <div class="form-check form-switch"><input class="form-check-input" name="'+
         rowData.FIELD1+"vCPU"+list[j]+"RAM"
         +'" type="checkbox" id="'+
       rowData[list[j]].split(',')[p]
@@ -1339,16 +1360,19 @@ function drawRow(rowData,list) {
       rowData[list[j]].split(',')[p]
       +'">';
       rowContent+=rowData[list[j]].split(',')[p]
-      rowContent+="</label></div>";
+      rowContent+="</label></div></td>";
     }
-    row += "<td>" + rowContent + "</td>";
+   // row +=  rowContent ;
+    $('[id="'+rowData.FIELD1+"vCPU"+list[j]+'RAM-tr"]').append(rowContent);
   };
-  row+= "</tr>";
-  $('#VMtable'+rowData.FIELD1+' tbody').append(row);
+ // row+= "</tr>";
+  
 }
 for (let i = 0; i < myObj2.length; i++) {
   drawTable([myObj2[i]]);
+
 }
+
 // Table Generation End
 
 //Result Table Generation Start
@@ -1380,10 +1404,22 @@ function keyVaule(key){
       return "1 Year Price $(USD)"
     }if (key=="retailPrice2"){
       return "3 Year Price $(USD)"
-    }else{
+    }if (key=="productName1"){
+      return "OS"
+    }if (key=="productName"){
+      return "Virtual Machine Series"
+    }if (key=="productNameser"){
+      return "OS License Type"
+    }
+    else{
       return key
     }      
 }
+
+//Virtual Machines A Series Basic
+//Virtual Machines A Series Basic Windows
+//Virtual Machines Av2 Series
+//Virtual Machines Av2 Series Windows
 
 function query (data) {
   return _.chain(data)
@@ -1391,7 +1427,16 @@ function query (data) {
     .map(item => ({
     //  "serviceFamily": item?.serviceFamily,
     //  "serviceName": item?.serviceName,
-      "productName": item?.productName,
+    "productName": item?.productName,
+    "productNameser": (item?.productName.includes("A Series")||item?.productName.includes("Av2 Series"))?
+      "Not Support Reserved Instances Option"
+      :
+      (item?.productName.includes("BS Series"))?"Windows Server Burst":"Windows Server"
+      ,
+      "productName1": 
+      (item?.productName.includes("Windows"))?
+      "Windows"
+      :"Linux",
       "location": item?.location,
     // "armRegionName": item?.armRegionName,
       "armSkuName": item?.armSkuName,
@@ -1497,7 +1542,7 @@ function query1 (data) {
     .orderBy(['unitPrice'], ['asc'])
     .map(item => ({
       "meterName": item?.meterName,
-      "productName": item?.productName,
+      "productNameser": item?.productName,
       "unitPrice": item?.unitPrice,
       "retailPrice": (Math.round((item?.retailPrice*730*100))/100).toFixed(2),
       "retailPrice1": (Math.round((item?.retailPrice*730*12*100))/100).toFixed(2),
